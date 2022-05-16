@@ -145,7 +145,7 @@ EventTarget.prototype.any = function(type, fn) {
  *        The name of the event, an `Event`, or an object with a key of type set to
  *        an event name.
  */
-EventTarget.prototype.trigger = function(event) {
+EventTarget.prototype.trigger = function(event, data) {
   const type = event.type || event;
 
   // deprecation
@@ -155,6 +155,11 @@ EventTarget.prototype.trigger = function(event) {
   // `document` due to the `Event.fixEvent` call.
   if (typeof event === 'string') {
     event = {type};
+    if (event.type === 'data') {
+      event.data = data;
+      Events.trigger(this, event);
+      return;
+    }
   }
   event = Events.fixEvent(event);
 
